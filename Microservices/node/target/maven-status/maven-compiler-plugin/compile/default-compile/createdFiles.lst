@@ -1,8 +1,0 @@
-com\capgemini\node\modal\Edge.class
-com\capgemini\node\repository\NodeRepository.class
-com\capgemini\node\modal\Node.class
-com\capgemini\node\NodeApplication.class
-com\capgemini\node\service\NodeService.class
-com\capgemini\node\modal\Node$NodeBuilder.class
-com\capgemini\node\service\NodeServiceImpl.class
-com\capgemini\node\modal\Edge$EdgeBuilder.class
