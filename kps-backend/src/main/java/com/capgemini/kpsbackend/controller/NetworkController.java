@@ -23,4 +23,19 @@ public class NetworkController {
     public List<Network> getAllNetwork(){
         return service.getAll();
     }
+
+    @GetMapping ("get-networks-by-id/")
+    public Network getNetworkById(@RequestParam(value = "id") int id){
+        return service.getById(id);
+    }
+
+   /* @PutMapping("update-network/")
+    public Network updateNetwork(){
+        //Todo
+    }*/
+
+    @DeleteMapping("delete-network-by-id/")
+    public void deleteNetworkById(@RequestParam(value = "id") int id){
+        service.deleteById(id);
+    }
 }
