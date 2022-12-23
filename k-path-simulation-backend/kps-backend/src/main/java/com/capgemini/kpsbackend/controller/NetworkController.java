@@ -1,8 +1,11 @@
 package com.capgemini.kpsbackend.controller;
 
+import com.capgemini.kpsbackend.algorithm.__Path;
 import com.capgemini.kpsbackend.dto.request.NetworkRequest;
 import com.capgemini.kpsbackend.dto.request.NetworkUpdateRequest;
 import com.capgemini.kpsbackend.entities.Network;
+import com.capgemini.kpsbackend.entities.circuit.Circuit;
+import com.capgemini.kpsbackend.entities.link.Link;
 import com.capgemini.kpsbackend.service.NetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,32 +16,43 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/network/")
+@CrossOrigin(origins = "*")
 public class NetworkController {
     @Autowired
     private NetworkService service;
 
     @PostMapping("add-network/")
-    public ResponseEntity<Network> addNetwork(@RequestBody NetworkRequest networkRequest){
-        return new ResponseEntity<>(service.add(networkRequest), HttpStatus.CREATED);
+    public Network addNetwork(@RequestBody NetworkRequest networkRequest){
+        return service.add(networkRequest);
     }
 
     @GetMapping("get-all-networks/")
-    public ResponseEntity<List<Network>> getAllNetwork(){
-        return new ResponseEntity<>(service.getAll(),HttpStatus.OK);
+    public List<Network> getAllNetwork(){
+        return service.getAll();
     }
 
     @GetMapping ("get-networks-by-id/")
-    public ResponseEntity<Network> getNetworkById(@RequestParam(value = "id") int id){
-        return new ResponseEntity<>(service.getById(id), HttpStatus.FOUND);
+    public Network getNetworkById(@RequestParam(value = "id") int id){
+        return service.getById(id);
+    }
+    @GetMapping("get-all-networks-for-user/")
+    public List<Network> getAllNetworkForUser(@RequestParam("username") String username)
+    {
+        return service.getAllNetworkForUser (username);
     }
 
     @PutMapping("update-network/")
     public ResponseEntity<Network> updateNetwork(@RequestBody NetworkUpdateRequest networkUpdateRequest){
-        return new ResponseEntity<>(service.update(networkUpdateRequest),HttpStatus.OK);
+        return new ResponseEntity<>(service.update(networkUpdateRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("delete-network-by-id/")
     public void deleteNetworkById(@RequestParam(value = "id") int id){
         service.deleteById(id);
+    }
+
+    @GetMapping("analyse-path/")
+    public List<Circuit> analysePath(@RequestParam("src") String src, @RequestParam("dst") String dst, @RequestParam("network-id") Integer networkId, @RequestParam("user-defined-path") String udf){
+        return service.analysePath(src,dst,networkId,udf);
     }
 }

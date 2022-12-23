@@ -3,6 +3,7 @@ package com.capgemini.kpsbackend.service;
 import com.capgemini.kpsbackend.dto.request.link.LinkRequest;
 import com.capgemini.kpsbackend.entities.link.Link;
 import com.capgemini.kpsbackend.entities.link.Space;
+import com.capgemini.kpsbackend.entities.node.Node;
 import com.capgemini.kpsbackend.exception.EntityNotFoundException;
 import com.capgemini.kpsbackend.repository.link.LinkRepository;
 import com.capgemini.kpsbackend.repository.link.SpaceRepository;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LinkService{
+public class LinkService {
 
     @Autowired
     private LinkRepository linkRepository;
@@ -53,16 +54,16 @@ public class LinkService{
         return linkRepository.findAll();
     }
 
-    public Link getById(int id) {
+    public Object getById(int id) {
         Optional<Link> link = linkRepository.findById(id);
         if(link.isEmpty()){
             throw new EntityNotFoundException("Link doesn't exists");
         }
-        return link.get();
+        return link;
     }
 
     @Transactional
-    public Link update(Link object) {
+    public Object update(Link object) {
         Optional<Link> link = linkRepository.findById(object.getId());
         if(link.isEmpty()){
             throw new EntityNotFoundException("Link doesn't exists");
@@ -102,9 +103,9 @@ public class LinkService{
             link.get().setNoOfSpaces(objectNoOfSpaces);
         }
         else if(!spacesList.equals(objectSpacesList)){
-            link.get().setSpaces(objectSpacesList);
+            //Todo
         }
-        return link.get();
+        return link;
     }
 
     public void deleteById(int id) {

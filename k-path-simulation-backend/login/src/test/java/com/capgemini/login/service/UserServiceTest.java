@@ -129,4 +129,5 @@ public class UserServiceTest {
         when(userRepository.findUserByEmail(email2)).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class,()->userService.updatePassword(username2, password1));
     }
+
 }

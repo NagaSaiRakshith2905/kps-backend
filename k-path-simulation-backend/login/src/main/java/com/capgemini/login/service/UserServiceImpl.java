@@ -9,9 +9,8 @@ import com.capgemini.login.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -22,9 +21,13 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public String registerUser(UserRequest user) {
+        System.out.println(user.toString());
         Optional<User> userNameExists = userRepository.findUserByUserName(user.getUserName());
-        if (userNameExists.isPresent())
+
+        if (userNameExists.isPresent()) {
+            System.out.println(userNameExists.get());
             throw new UserAlreadyExistsException("Username already exists");
+        }
         Optional<User> userEmailExists = userRepository.findUserByEmail(user.getEmail());
         if (userEmailExists.isPresent())
             throw new UserAlreadyExistsException("Email already exists");
@@ -35,19 +38,17 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(userDetails);
         return savedUser.getUserName();
     }
+
     public String loginUser(String value, String password) {
         Optional<User> userDetailsByUsername = userRepository.findUserByUserName(value);
         if (userDetailsByUsername.isEmpty()) {
             Optional<User> userDetailsByEmail = userRepository.findUserByEmail(value);
             if (userDetailsByEmail.isEmpty()) {
                 throw new UserNotFoundException("Invalid email or username");
-            }
-            else if (!password.equals(userDetailsByEmail.get().getPassword())) {
+            } else if (!password.equals(userDetailsByEmail.get().getPassword()))
                 throw new UserNotFoundException("Wrong password");
-            }
             return userDetailsByEmail.get().getUserName();
-        }
-        else if (!password.equals(userDetailsByUsername.get().getPassword())) {
+        } else if (!password.equals(userDetailsByUsername.get().getPassword())) {
             throw new UserNotFoundException("Wrong password");
         }
         return userDetailsByUsername.get().getUserName();
@@ -63,6 +64,7 @@ public class UserServiceImpl implements UserService {
                 .email(user.get().getEmail())
                 .build();
     }
+
     @Override
     public UserResponse getUserById(int id) {
         Optional<User> user = userRepository.findById(id);

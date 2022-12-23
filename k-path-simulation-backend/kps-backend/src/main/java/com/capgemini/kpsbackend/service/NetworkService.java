@@ -1,8 +1,10 @@
 package com.capgemini.kpsbackend.service;
 
+import com.capgemini.kpsbackend.algorithm.__Path;
 import com.capgemini.kpsbackend.dto.request.NetworkRequest;
 import com.capgemini.kpsbackend.dto.request.NetworkUpdateRequest;
 import com.capgemini.kpsbackend.entities.Network;
+import com.capgemini.kpsbackend.entities.circuit.Circuit;
 import com.capgemini.kpsbackend.entities.link.Link;
 import com.capgemini.kpsbackend.entities.node.Node;
 import com.capgemini.kpsbackend.exception.EntityNotFoundException;
@@ -17,15 +19,19 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class NetworkService implements ServiceInterface<NetworkRequest, Network,NetworkUpdateRequest> {
+public class NetworkService implements ServiceInterface {
 
     @Autowired
     private NetworkRepository networkRepository;
+
     @Autowired
     private NodeService nodeService;
 
     @Autowired
     private LinkService linkService;
+
+    @Autowired
+    private AnalysePathService analysePathService;
 
     @Override
     public Network add(NetworkRequest networkRequest) {
@@ -49,14 +55,13 @@ public class NetworkService implements ServiceInterface<NetworkRequest, Network,
 
     @Override
     public List<Network> getAll() {
-        List<Network> network = networkRepository.findAll();
         return networkRepository.findAll();
     }
 
     @Override
     public Network getById(int id) {
         Optional<Network> network = networkRepository.findById(id);
-        if(network.isEmpty()){
+        if (network.isEmpty()) {
             throw new EntityNotFoundException("Network doesn't exists");
         }
         return network.get();
@@ -100,7 +105,7 @@ public class NetworkService implements ServiceInterface<NetworkRequest, Network,
         }
 
         if(objectLink.isPresent()){
-                objectLink.get().forEach(link1 -> linkService.update(link1));
+            objectLink.get().forEach(link1 -> linkService.update(link1));
         }
         return network.get();
     }
@@ -108,10 +113,29 @@ public class NetworkService implements ServiceInterface<NetworkRequest, Network,
     @Override
     public void deleteById(int id) {
         Optional<Network> network = networkRepository.findById(id);
-        if(network.isEmpty()){
+        if (network.isEmpty()) {
             throw new EntityNotFoundException("Network doesn't exists");
         }
         networkRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Network> getAllNetworkForUser(String username) {
+        Optional<List<Network>> networks = networkRepository.findByUsername(username);
+        if (networks.isEmpty()) {
+            throw new EntityNotFoundException("Networks doesn't exists for this user");
+        }
+        return networks.get();
+    }
+
+    public List<Circuit> analysePath(String src, String dst, Integer networkId, String udf) {
+        analysePathService.createPath(src, dst, udf, networkId);
+        Optional<Network> network = networkRepository.findById(networkId);
+        if (network.isEmpty()) {
+            throw new EntityNotFoundException("Networks doesn't exists for this user");
+        }
+        network.get().getCircuits().forEach(circuit -> System.out.println(circuit.getSourceNode()+" "+circuit.getDestinationNode()));
+        return network.get().getCircuits();
     }
 
 }

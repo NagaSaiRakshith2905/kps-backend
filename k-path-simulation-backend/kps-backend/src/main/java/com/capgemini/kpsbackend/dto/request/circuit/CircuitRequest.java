@@ -15,5 +15,6 @@ import java.util.List;
 public class CircuitRequest {
     private String sourceNode;
     private String destinationNode;
-
+    private Integer networkId;
+    private String userDefinedPath;
 }

@@ -31,7 +31,7 @@ public class Circuit {
     private List<Path> paths;
 
     @JsonIgnore
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "network_id")
     private Network network;
 }
