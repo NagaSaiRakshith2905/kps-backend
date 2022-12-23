@@ -35,6 +35,6 @@ public class Network {
     @OneToMany(mappedBy = "network",cascade = CascadeType.ALL)
     private List<Link> links;
 
-    @OneToOne(mappedBy = "network",cascade = CascadeType.ALL)
-    private Circuit circuit;
+    @OneToMany(mappedBy = "network",cascade = CascadeType.ALL)
+    private List<Circuit> circuits;
 }

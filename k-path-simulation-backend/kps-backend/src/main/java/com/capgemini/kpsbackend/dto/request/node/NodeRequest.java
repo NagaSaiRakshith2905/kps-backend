@@ -17,9 +17,8 @@ public class NodeRequest {
     private String nodeName;
     private String ipAddress;
     private String password;
-    private Integer xPosition;
-    private Integer yPosition;
+    private Integer x;
+    private Integer y;
     private String nodeType;
-    private List<Edge> edges;
     private Network network;
 }

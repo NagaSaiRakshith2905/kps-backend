@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/api/user/")
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 
     @PostMapping(path = "register/")
     public ResponseEntity<String> registerUser(@RequestBody UserRequest user){
+        System.out.println(user);
         return new ResponseEntity<>(userService.registerUser(user), HttpStatus.CREATED);
     }
 

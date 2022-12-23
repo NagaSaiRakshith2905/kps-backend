@@ -14,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 @Slf4j
-public class NodeService{
+public class NodeService {
 
     @Autowired
     private NodeRepository nodeRepository;
@@ -26,13 +27,14 @@ public class NodeService{
     private EdgeRepository edgeRepository;
 
     public Node add(NodeRequest nodeRequest) {
+        log.info(nodeRequest.toString());
         Node node = Node.builder()
                 .nodeName(nodeRequest.getNodeName())
                 .ipAddress(nodeRequest.getIpAddress())
                 .password(nodeRequest.getPassword())
                 .nodeType(mapToNodeType(nodeRequest.getNodeType()))
-                .xPosition(nodeRequest.getXPosition())
-                .yPosition(nodeRequest.getYPosition())
+                .x(nodeRequest.getX())
+                .y(nodeRequest.getY())
                 .network(nodeRequest.getNetwork())
                 .build();
         Node savedNode = nodeRepository.save(node);
@@ -82,16 +84,16 @@ public class NodeService{
         String nodeName = node.get().getNodeName();
         String ipAddress = node.get().getIpAddress();
         String password = node.get().getPassword();
-        int xPosition = node.get().getXPosition();
-        int yPosition = node.get().getYPosition();
+        int xPosition = node.get().getX();
+        int yPosition = node.get().getY();
         NodeType nodeType = node.get().getNodeType();
         List<Edge> edgeList = node.get().getEdges();
 
         String objectNodeName = object.getNodeName();
         String objectIpAddress = object.getIpAddress();
         String objectPassword = object.getPassword();
-        int objectXPosition = object.getXPosition();
-        int objectYPosition = object.getYPosition();
+        int objectXPosition = object.getX();
+        int objectYPosition = object.getY();
         NodeType objectNodeType = object.getNodeType();
         List<Edge> objectEdgeList = object.getEdges();
 
@@ -105,16 +107,16 @@ public class NodeService{
             node.get().setPassword(objectPassword);
         }
         else if(xPosition!=objectXPosition){
-            node.get().setXPosition(objectXPosition);
+            node.get().setX(objectXPosition);
         }
         else if(yPosition!=objectYPosition){
-            node.get().setYPosition(objectYPosition);
+            node.get().setY(objectYPosition);
         }
         else if(!nodeType.equals(objectNodeType)){
             node.get().setNodeType(objectNodeType);
         }
         else if(!edgeList.equals(objectEdgeList)){
-           node.get().setEdges(objectEdgeList);
+           //Todo
         }
         return node.get();
     }

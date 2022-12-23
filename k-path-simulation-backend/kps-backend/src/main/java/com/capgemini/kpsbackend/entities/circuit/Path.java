@@ -24,7 +24,7 @@ public class Path {
     private Integer id;
 
     private Integer totalWeight;
-
+    private Integer spaceOccupied;
 
     @OneToMany(mappedBy = "path",cascade = CascadeType.ALL)
     private List<PathNode> nodes;

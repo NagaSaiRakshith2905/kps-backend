@@ -1,6 +1,7 @@
 package com.capgemini.kpsbackend.dto.request.link;
 
 import com.capgemini.kpsbackend.entities.Network;
+import com.capgemini.kpsbackend.entities.link.Space;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

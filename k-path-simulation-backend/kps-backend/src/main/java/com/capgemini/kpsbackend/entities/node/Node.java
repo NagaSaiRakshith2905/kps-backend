@@ -27,8 +27,8 @@ public class Node {
     private String nodeName;
     private String ipAddress;
     private String password;
-    private Integer xPosition;
-    private Integer yPosition;
+    private Integer x;
+    private Integer y;
     private NodeType nodeType;
 
     @OneToMany(mappedBy = "node" , cascade = CascadeType.ALL)
